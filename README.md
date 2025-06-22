@@ -28,3 +28,16 @@ mvn spring-boot:run
 ```
 Jei portą 8080 naudoja kita programa, jį galima keisti faile application.properties:
 server.port=8081
+
+## Swagger / OpenAPI dokumentacija
+Aplikacija automatiškai generuoja OpenAPI specifikaciją ir Swagger UI.
+- Swagger UI: 
+- OpenAPI JSON: 
+
+GET /api/mapserver?url=https://www.geoportal.lt/mapproxy/gisc_pagrindinis/MapServer
+
+## Testavimas
+
+```bash
+mvn test
+```
