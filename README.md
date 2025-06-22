@@ -33,6 +33,8 @@ server.port=8081
 Aplikacija automatiškai generuoja OpenAPI specifikaciją ir Swagger UI.
 - Swagger UI: 
 - OpenAPI JSON: 
+http://localhost:8081/swagger-ui/index.html#/
+
 
 GET /api/mapserver?url=https://www.geoportal.lt/mapproxy/gisc_pagrindinis/MapServer
 
