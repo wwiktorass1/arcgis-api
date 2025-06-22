@@ -25,6 +25,6 @@ git clone https://github.com/<wwiktorass1>/arcgis-api.git
 cd arcgis-api
 mvn spring-boot:run
 
-
+```
 Jei portą 8080 naudoja kita programa, jį galima keisti faile application.properties:
 server.port=8081
