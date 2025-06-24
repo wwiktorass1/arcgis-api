@@ -1,24 +1,25 @@
-# ArcGIS MapServer API
+# 🌍 ArcGIS MapServer API – REST paslauga ArcGIS metaduomenų nuskaitymui
 
-Spring Boot aplikacija, leidžianti pasiekti ir transformuoti ArcGIS MapServer duomenis į struktūruotą JSON atsakymą.
+Ši Spring Boot aplikacija leidžia naudotojams per HTTP užklausą pateikti ArcGIS MapServer serviso URL, automatiškai nuskaito jo metaduomenis JSON formatu ir pateikia struktūruotą atsakymą su pagrindine serviso informacija ir sluoksniais. Projektas sukurtas kaip praktinė užduotis siekiant įvertinti Java/Spring Boot kompetencijas dirbant su REST API bei išoriniais geoinformaciniais šaltiniais.
 
-## 📦 Funkcionalumas
+## 📌 Funkcionalumo santrauka
 
-- Vartotojas gali perduoti MapServer URL kaip parametrą
-- Servisas kviečia atitinkamą ArcGIS REST API (`f=json`)
-- Grąžinamas JSON su:
-  - žemėlapio pavadinimu
-  - aprašymu
-  - sluoksnių sąrašu (`id` + `name`)
+- ☑️ `GET` užklausa su `url` parametru, nurodančiu ArcGIS MapServer adresą
+- ☑️ Automatinis `?f=json` parametro pridėjimas serviso informacijos gavimui
+- ☑️ Išvestis JSON formatu, apimanti:
+  - Žemėlapio pavadinimą (`mapName`)
+  - Serviso aprašymą (`description`)
+  - Sluoksnių sąrašą (`id`, `name`)
 
-## 🔧 Naudojamos technologijos
+## 🛠️ Naudotos technologijos
 
+- Java 17+
 - Spring Boot 3.1.9
 - Maven
-- Java 17+
 - RestTemplate + Jackson
+- Springdoc OpenAPI 2.x
 
-## 🚀 Paleidimas lokaliai
+## 🚀 Projekto paleidimas
 
 ```bash
 git clone https://github.com/<wwiktorass1>/arcgis-api.git
@@ -26,8 +27,12 @@ cd arcgis-api
 mvn spring-boot:run
 
 ```
-Jei portą 8080 naudoja kita programa, jį galima keisti faile application.properties:
-server.port=8081
+> ⚠️ **Pastaba:** jei portas `8080` yra užimtas, galite jį pakeisti faile `src/main/resources/application.properties`:
+> 
+> ```properties
+> server.port=8081
+> ```
+
 
 ## Swagger / OpenAPI dokumentacija
 Aplikacija automatiškai generuoja OpenAPI specifikaciją ir Swagger UI.
@@ -40,6 +45,31 @@ GET /api/mapserver?url=https://www.geoportal.lt/mapproxy/gisc_pagrindinis/MapSer
 
 ## Testavimas
 
+Projekto vienetinius testus galima paleisti su:
 ```bash
 mvn test
+
+Testavimo adresai
+
+Galite naudoti šiuos ArcGIS MapServer URL: 
+https://www.geoportal.lt/mapproxy/gisc_pagrindinis/MapServer ir https://www.geoportal.lt/mapproxy/nzt_ort10lt_2024_2026/MapServer
+
 ```
+
+## Projekto struktūra
+src/
+├── controller/         → REST valdikliai
+├── service/            → Verslo logika
+├── dto/                → Duomenų modeliai (perdavimui)
+├── config/             → Swagger / OpenAPI konfigūracija
+└── exception/          → Klaidos apdorojimo klasės
+
+
+- Potencialias plėtros kryptis: pvz., parametrų validacija, daugiau MapServer laukų, arba pridėti POST palaikymą su JSON body.
+- Deploy alternatyvas: paleidimas Docker konteineryje.
+
+
+Viktoras Vorobjovas
+
+
+

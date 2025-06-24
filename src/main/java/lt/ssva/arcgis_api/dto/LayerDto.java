@@ -1,14 +1,21 @@
 package lt.ssva.arcgis_api.dto;
 
 public class LayerDto {
-    private Integer id;
+    private int id;
     private String name;
 
-    public Integer getId() {
+    public LayerDto() {}
+
+    public LayerDto(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
