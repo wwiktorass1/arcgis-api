@@ -45,9 +45,18 @@ GET /api/mapserver?url=https://www.geoportal.lt/mapproxy/gisc_pagrindinis/MapSer
 
 ## Testavimas
 
-Projekto vienetinius testus galima paleisti su:
+Projektas turi vienetinius ir integracinius testus, parašytus su JUnit 5 ir Spring Boot testavimo bibliotekomis.
+
+### Vienetiniai testai:
+- `MapServerServiceTest` tikrina transformacijos logiką su `mock`‘intu `RestTemplate`.
+
+### Integraciniai testai:
+- `MapServerIntegrationTest` paleidžia pilną Spring kontekstą (`@SpringBootTest`) ir testuoja realų API atsaką.
+
+### Testų paleidimas:
 ```bash
-mvn test
+mvn clean test
+
 
 Testavimo adresai
 

@@ -1,54 +1,44 @@
 package lt.ssva.arcgis_api.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.ssva.arcgis_api.dto.LayerDto;
 import lt.ssva.arcgis_api.dto.MapServerResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MapServerService {
 
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public MapServerService() {
-        this.restTemplate = new RestTemplate();
-        this.objectMapper = new ObjectMapper();
+    public MapServerService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
-    public MapServerResponseDto fetchAndTransform(String baseUrl) {
+    public MapServerResponseDto fetchAndTransform(String url) {
         try {
-            String fullUrl = UriComponentsBuilder.fromHttpUrl(baseUrl)
-                    .queryParam("f", "json")
-                    .toUriString();
+            String fullUrl = url + "?f=json";
+            ResponseEntity<String> response = restTemplate.getForEntity(fullUrl, String.class);
 
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(fullUrl, String.class);
-            String responseBody = responseEntity.getBody();
+            JsonNode root = objectMapper.readTree(response.getBody());
 
-            Map<String, Object> response = objectMapper.readValue(responseBody, Map.class);
+            String mapName = root.path("mapName").asText();
+            String description = root.path("description").asText();
 
-            MapServerResponseDto result = new MapServerResponseDto();
-            result.setMapName((String) response.get("mapName"));
-            result.setDescription((String) response.get("description"));
-
-            List<Map<String, Object>> layers = (List<Map<String, Object>>) response.get("layers");
-            if (layers != null) {
-                List<LayerDto> layerDtos = layers.stream().map(layer -> {
-                    LayerDto dto = new LayerDto();
-                    dto.setId((Integer) layer.get("id"));
-                    dto.setName((String) layer.get("name"));
-                    return dto;
-                }).toList();
-                result.setLayers(layerDtos);
+            List<LayerDto> layers = new ArrayList<>();
+            for (JsonNode layerNode : root.path("layers")) {
+                int id = layerNode.path("id").asInt();
+                String name = layerNode.path("name").asText();
+                layers.add(new LayerDto(id, name));
             }
 
-            return result;
+            return new MapServerResponseDto(mapName, description, layers);
         } catch (Exception e) {
             throw new RuntimeException("Klaida apdorojant ArcGIS atsakymą: " + e.getMessage(), e);
         }

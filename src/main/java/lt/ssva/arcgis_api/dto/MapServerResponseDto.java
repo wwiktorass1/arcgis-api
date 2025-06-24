@@ -1,11 +1,20 @@
 package lt.ssva.arcgis_api.dto;
 
+import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MapServerResponseDto {
     private String mapName;
     private String description;
     private List<LayerDto> layers;
+
+
+
 
     public String getMapName() {
         return mapName;
