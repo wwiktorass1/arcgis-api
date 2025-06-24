@@ -56,17 +56,36 @@ https://www.geoportal.lt/mapproxy/gisc_pagrindinis/MapServer ir https://www.geop
 
 ```
 
-## Projekto struktūra
+## 📁 Projekto struktūra
+
+```
 src/
 ├── controller/         → REST valdikliai
 ├── service/            → Verslo logika
 ├── dto/                → Duomenų modeliai (perdavimui)
 ├── config/             → Swagger / OpenAPI konfigūracija
 └── exception/          → Klaidos apdorojimo klasės
+```
 
 
-- Potencialias plėtros kryptis: pvz., parametrų validacija, daugiau MapServer laukų, arba pridėti POST palaikymą su JSON body.
-- Deploy alternatyvas: paleidimas Docker konteineryje.
+## 🚀 Galimos plėtros kryptys
+
+- Įdiegti parametrų validaciją (`@Valid`, `@NotNull`, ir kt.)
+- Išplėsti atsakymą su papildomais MapServer laukais (pvz. `spatialReference`, `fullExtent`)
+- Pridėti `POST` endpoint'ą su JSON `body` alternatyvai vietoj URL parametro
+
+## 🐳 Deploy alternatyvos
+
+Projektą galima papildyti `Dockerfile`, leidžiančiu paleisti aplikaciją konteineryje:
+
+```dockerfile
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY . .
+RUN ./mvnw clean package -DskipTests
+CMD ["java", "-jar", "target/arcgis-api-0.0.1-SNAPSHOT.jar"]
+```
+
 
 
 Viktoras Vorobjovas
